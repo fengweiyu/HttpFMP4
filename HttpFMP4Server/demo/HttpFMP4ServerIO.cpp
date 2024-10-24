@@ -1,7 +1,7 @@
 /*****************************************************************************
 * Copyright (C) 2020-2025 Hanson Yu  All rights reserved.
 ------------------------------------------------------------------------------
-* File Module           :       HttpFlvServerIO.c
+* File Module           :       HttpFMP4ServerIO.c
 * Description           : 	
 * Created               :       2023.01.13.
 * Author                :       Yu Weifeng
@@ -9,7 +9,7 @@
 * Last Modified         : 	
 * History               : 	
 ******************************************************************************/
-#include "HttpFlvServerIO.h"
+#include "HttpFMP4ServerIO.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -18,12 +18,12 @@
 
 using std::thread;
 
-#define HTTP_FLV_IO_RECV_MAX_LEN (10240)
-#define HTTP_FLV_IO_SEND_MAX_LEN (3*1024*1024)
+#define HTTP_FMP4_IO_RECV_MAX_LEN (10240)
+#define HTTP_FMP4_IO_SEND_MAX_LEN (3*1024*1024)
 
 /*****************************************************************************
--Fuction		: HttpFlvServerIO
--Description	: HttpFlvServerIO
+-Fuction		: HttpFMP4ServerIO
+-Description	: HttpFMP4ServerIO
 -Input			: 
 -Output 		: 
 -Return 		: 
@@ -31,18 +31,18 @@ using std::thread;
 * -----------------------------------------------
 * 2017/10/10	  V1.0.0		 Yu Weifeng 	  Created
 ******************************************************************************/
-HttpFlvServerIO :: HttpFlvServerIO(int i_iClientSocketFd)
+HttpFMP4ServerIO :: HttpFMP4ServerIO(int i_iClientSocketFd)
 {
     m_iClientSocketFd=i_iClientSocketFd;
     
-    m_iHttpFlvServerIOFlag = 0;
-    m_pHttpFlvServerIOProc = new thread(&HttpFlvServerIO::Proc, this);
+    m_iHttpFMP4ServerIOFlag = 0;
+    m_pHttpFMP4ServerIOProc = new thread(&HttpFMP4ServerIO::Proc, this);
     //m_pHttpSessionProc->detach();//注意线程回收
 }
 
 /*****************************************************************************
--Fuction		: ~HttpFlvServerIO
--Description	: ~HttpFlvServerIO
+-Fuction		: ~HttpFMP4ServerIO
+-Description	: ~HttpFMP4ServerIO
 -Input			: 
 -Output 		: 
 -Return 		: 
@@ -50,18 +50,18 @@ HttpFlvServerIO :: HttpFlvServerIO(int i_iClientSocketFd)
 * -----------------------------------------------
 * 2017/10/10	  V1.0.0		 Yu Weifeng 	  Created
 ******************************************************************************/
-HttpFlvServerIO :: ~HttpFlvServerIO()
+HttpFMP4ServerIO :: ~HttpFMP4ServerIO()
 {
-    if(NULL!= m_pHttpFlvServerIOProc)
+    if(NULL!= m_pHttpFMP4ServerIOProc)
     {
-        FLV_LOGW("~HttpFlvServerIO start exit\r\n");
-        m_iHttpFlvServerIOFlag = 0;
+        FMP4_LOGW("~HttpFMP4ServerIO start exit\r\n");
+        m_iHttpFMP4ServerIOFlag = 0;
         //while(0 == m_iExitProcFlag){usleep(10);};
-        m_pHttpFlvServerIOProc->join();//
-        delete m_pHttpFlvServerIOProc;
-        m_pHttpFlvServerIOProc = NULL;
+        m_pHttpFMP4ServerIOProc->join();//
+        delete m_pHttpFMP4ServerIOProc;
+        m_pHttpFMP4ServerIOProc = NULL;
     }
-    FLV_LOGW("~~HttpFlvServerIO exit\r\n");
+    FMP4_LOGW("~~HttpFMP4ServerIO exit\r\n");
 }
 
 /*****************************************************************************
@@ -74,7 +74,7 @@ HttpFlvServerIO :: ~HttpFlvServerIO()
 * -----------------------------------------------
 * 2017/10/10	  V1.0.0		 Yu Weifeng 	  Created
 ******************************************************************************/
-int HttpFlvServerIO :: Proc()
+int HttpFMP4ServerIO :: Proc()
 {
     int iRet=-1;
     char *pcRecvBuf=NULL;
@@ -84,51 +84,51 @@ int HttpFlvServerIO :: Proc()
     
     if(m_iClientSocketFd < 0)
     {
-        FLV_LOGE("HttpFlvServerIO m_iClientSocketFd < 0 err\r\n");
+        FMP4_LOGE("HttpFMP4ServerIO m_iClientSocketFd < 0 err\r\n");
         return -1;
     }
-    pcRecvBuf = new char[HTTP_FLV_IO_RECV_MAX_LEN];
+    pcRecvBuf = new char[HTTP_FMP4_IO_RECV_MAX_LEN];
     if(NULL == pcRecvBuf)
     {
-        FLV_LOGE("HttpFlvServerIO NULL == pcRecvBuf err\r\n");
+        FMP4_LOGE("HttpFMP4ServerIO NULL == pcRecvBuf err\r\n");
         return -1;
     }
-    pcSendBuf = new char[HTTP_FLV_IO_SEND_MAX_LEN];
+    pcSendBuf = new char[HTTP_FMP4_IO_SEND_MAX_LEN];
     if(NULL == pcSendBuf)
     {
-        FLV_LOGE("HttpFlvServerIO NULL == pcSendBuf err\r\n");
+        FMP4_LOGE("HttpFMP4ServerIO NULL == pcSendBuf err\r\n");
         delete[] pcRecvBuf;
         return -1;
     }
-    m_iHttpFlvServerIOFlag = 1;
-    FLV_LOGW("HlsServerIO start Proc\r\n");
-    while(m_iHttpFlvServerIOFlag)
+    m_iHttpFMP4ServerIOFlag = 1;
+    FMP4_LOGW("HlsServerIO start Proc\r\n");
+    while(m_iHttpFMP4ServerIOFlag)
     {
         iRecvLen = 0;
-        memset(pcRecvBuf,0,HTTP_FLV_IO_RECV_MAX_LEN);
+        memset(pcRecvBuf,0,HTTP_FMP4_IO_RECV_MAX_LEN);
         milliseconds timeMS(10);// 表示10毫秒
-        iRet=TcpServer::Recv(pcRecvBuf,&iRecvLen,HTTP_FLV_IO_RECV_MAX_LEN,m_iClientSocketFd,&timeMS);
+        iRet=TcpServer::Recv(pcRecvBuf,&iRecvLen,HTTP_FMP4_IO_RECV_MAX_LEN,m_iClientSocketFd,&timeMS);
         if(iRet < 0)
         {
-            FLV_LOGE("TcpServer::Recv err exit %d\r\n",iRecvLen);
+            FMP4_LOGE("TcpServer::Recv err exit %d\r\n",iRecvLen);
             break;
         }
         if(iRecvLen<=0)
         {
-            iRet=m_HttpFlvServerInf.GetFLV(pcSendBuf,HTTP_FLV_IO_SEND_MAX_LEN);
+            iRet=m_HttpFMP4ServerInf.GetFMP4(pcSendBuf,HTTP_FMP4_IO_SEND_MAX_LEN);
             if(iRet > 0)
             {
                 TcpServer::Send(pcSendBuf,iRet,m_iClientSocketFd);
             }
             else if(iRet < 0)
             {
-                FLV_LOGE("m_HttpFlvServerInf.GetFLV err exit %d\r\n",iRecvLen);
+                FMP4_LOGE("m_HttpFMP4ServerInf.GetFMP4 err exit %d\r\n",iRecvLen);
                 break;
             }
             continue;
         }
-        memset(pcSendBuf,0,HTTP_FLV_IO_SEND_MAX_LEN);
-        iRet=m_HttpFlvServerInf.HandleHttpReq(pcRecvBuf,pcSendBuf,HTTP_FLV_IO_SEND_MAX_LEN);
+        memset(pcSendBuf,0,HTTP_FMP4_IO_SEND_MAX_LEN);
+        iRet=m_HttpFMP4ServerInf.HandleHttpReq(pcRecvBuf,pcSendBuf,HTTP_FMP4_IO_SEND_MAX_LEN);
         if(iRet > 0)
         {
             TcpServer::Send(pcSendBuf,iRet,m_iClientSocketFd);
@@ -138,7 +138,7 @@ int HttpFlvServerIO :: Proc()
     if(m_iClientSocketFd>=0)
     {
         TcpServer::Close(m_iClientSocketFd);//主动退出,
-        FLV_LOGW("HttpFlvServerIO::Close m_iClientSocketFd Exit%d\r\n",m_iClientSocketFd);
+        FMP4_LOGW("HttpFMP4ServerIO::Close m_iClientSocketFd Exit%d\r\n",m_iClientSocketFd);
     }
     if(NULL != pcSendBuf)
     {
@@ -149,13 +149,13 @@ int HttpFlvServerIO :: Proc()
         delete[] pcRecvBuf;
     }
     
-    m_iHttpFlvServerIOFlag=0;
+    m_iHttpFMP4ServerIOFlag=0;
     return 0;
 }
 
 /*****************************************************************************
 -Fuction		: GetProcFlag
--Description	: HttpFlvServerIO
+-Description	: HttpFMP4ServerIO
 -Input			: 
 -Output 		: 
 -Return 		: 
@@ -163,8 +163,8 @@ int HttpFlvServerIO :: Proc()
 * -----------------------------------------------
 * 2017/10/10	  V1.0.0		 Yu Weifeng 	  Created
 ******************************************************************************/
-int HttpFlvServerIO :: GetProcFlag()
+int HttpFMP4ServerIO :: GetProcFlag()
 {
-    return m_iHttpFlvServerIOFlag;//多线程竞争注意优化
+    return m_iHttpFMP4ServerIOFlag;//多线程竞争注意优化
 }
 

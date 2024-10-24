@@ -1,7 +1,7 @@
 /*****************************************************************************
 * Copyright (C) 2020-2025 Hanson Yu  All rights reserved.
 ------------------------------------------------------------------------------
-* File Module           :       HlsServerSession.cpp
+* File Module           :       HttpFMP4ServerSession.cpp
 * Description           : 	
 * Created               :       2022.01.13.
 * Author                :       Yu Weifeng
@@ -9,8 +9,8 @@
 * Last Modified         : 	
 * History               : 	
 ******************************************************************************/
-#include "HttpFlvServerSession.h"
-#include "HttpFlvServerCom.h"
+#include "HttpFMP4ServerSession.h"
+#include "HttpFMP4ServerCom.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -19,7 +19,7 @@
 //#include <sys/time.h>
 //#include "cJSON.h"
 
-#define HTTP_FLV_FRAME_BUF_MAX_LEN	(2*1024*1024) 
+#define HTTP_FMP4_FRAME_BUF_MAX_LEN	(2*1024*1024) 
 
 /*****************************************************************************
 -Fuction        : HlsServerSession
@@ -31,17 +31,16 @@
 * -----------------------------------------------
 * 2020/01/13      V1.0.0              Yu Weifeng       Created
 ******************************************************************************/
-HttpFlvServerSession::HttpFlvServerSession(char * i_strPlaySrc,int i_iEnhancedFlag)
+HttpFMP4ServerSession::HttpFMP4ServerSession(char * i_strPlaySrc)
 {
     m_pPlaySrc = new string(i_strPlaySrc);
     m_pMediaHandle = new MediaHandle();
     m_dwFileLastTimeStamp = 0;
-    m_iEnhancedFlag=i_iEnhancedFlag;
 
-    FLV_LOGW("HttpFlvServerSession start%d, %s\r\n",m_iEnhancedFlag,m_pPlaySrc->c_str());
+    FMP4_LOGW("HttpFMP4ServerSession start%d, %s\r\n",m_iEnhancedFlag,m_pPlaySrc->c_str());
     memset(&m_tFileFrameInfo,0,sizeof(T_MediaFrameInfo));
-    m_tFileFrameInfo.pbFrameBuf = new unsigned char [HTTP_FLV_FRAME_BUF_MAX_LEN];
-    m_tFileFrameInfo.iFrameBufMaxLen = HTTP_FLV_FRAME_BUF_MAX_LEN;
+    m_tFileFrameInfo.pbFrameBuf = new unsigned char [HTTP_FMP4_FRAME_BUF_MAX_LEN];
+    m_tFileFrameInfo.iFrameBufMaxLen = HTTP_FMP4_FRAME_BUF_MAX_LEN;
     m_pMediaHandle->Init(i_strPlaySrc);//默认取文件流
 }
 /*****************************************************************************
@@ -54,19 +53,19 @@ HttpFlvServerSession::HttpFlvServerSession(char * i_strPlaySrc,int i_iEnhancedFl
 * -----------------------------------------------
 * 2020/01/13      V1.0.0              Yu Weifeng       Created
 ******************************************************************************/
-HttpFlvServerSession::~HttpFlvServerSession()
+HttpFMP4ServerSession::~HttpFMP4ServerSession()
 {
     delete m_pPlaySrc;
     delete m_pMediaHandle;
     if(NULL!= m_tFileFrameInfo.pbFrameBuf)
     {
-        FLV_LOGW("~HttpFlvServerSession start exit\r\n");
+        FMP4_LOGW("~HttpFMP4ServerSession start exit\r\n");
         delete [] m_tFileFrameInfo.pbFrameBuf;
         m_tFileFrameInfo.pbFrameBuf = NULL;
     }
 }
 /*****************************************************************************
--Fuction        : GetFlv
+-Fuction        : GetFMP4
 -Description    : 如果是实时流，可以改为通过传参传入m_tFileFrameInfo
 -Input          : 
 -Output         : 
@@ -75,7 +74,7 @@ HttpFlvServerSession::~HttpFlvServerSession()
 * -----------------------------------------------
 * 2020/01/13      V1.0.0              Yu Weifeng       Created
 ******************************************************************************/
-int HttpFlvServerSession::GetFlv(char *o_strRes,int i_iResMaxLen)
+int HttpFMP4ServerSession::GetFMP4(char *o_strRes,int i_iResMaxLen)
 {
     int iRet = -1;
 	unsigned int dwLastSegTimeStamp=0;
@@ -86,7 +85,7 @@ int HttpFlvServerSession::GetFlv(char *o_strRes,int i_iResMaxLen)
 	
     if(NULL == o_strRes)
     {
-        FLV_LOGE("NULL == o_strRes %d[%s]\r\n",iRet,m_pPlaySrc->c_str());
+        FMP4_LOGE("NULL == o_strRes %d[%s]\r\n",iRet,m_pPlaySrc->c_str());
         return iRet;
     }
     do
@@ -94,7 +93,7 @@ int HttpFlvServerSession::GetFlv(char *o_strRes,int i_iResMaxLen)
         iRet=m_pMediaHandle->GetFrame(&m_tFileFrameInfo);//非文件流可直接调用此接口
         if(iRet<0)
         {
-            FLV_LOGE("GetFrame err exit %d[%s]\r\n",iRet,m_pPlaySrc->c_str());
+            FMP4_LOGE("GetFrame err exit %d[%s]\r\n",iRet,m_pPlaySrc->c_str());
             break;
         }
         if(0==m_dwFileLastTimeStamp)
@@ -104,7 +103,7 @@ int HttpFlvServerSession::GetFlv(char *o_strRes,int i_iResMaxLen)
         }
         if(m_tFileFrameInfo.dwTimeStamp<m_dwFileLastTimeStamp)
         {
-            FLV_LOGE("dwTimeStamp err exit %d,%d\r\n",m_tFileFrameInfo.dwTimeStamp,m_dwFileLastTimeStamp);
+            FMP4_LOGE("dwTimeStamp err exit %d,%d\r\n",m_tFileFrameInfo.dwTimeStamp,m_dwFileLastTimeStamp);
             break;
         }
         iSleepTimeMS=(int)(m_tFileFrameInfo.dwTimeStamp-m_dwFileLastTimeStamp);
@@ -117,26 +116,19 @@ int HttpFlvServerSession::GetFlv(char *o_strRes,int i_iResMaxLen)
         m_dwFileLastTick = GetTickCount();
         if(MEDIA_FRAME_TYPE_VIDEO_I_FRAME== m_tFileFrameInfo.eFrameType)
         {
-            FLV_LOGD("MEDIA_FRAME_TYPE_VIDEO_I_FRAME %d,%d\r\n",m_tFileFrameInfo.dwTimeStamp,m_dwFileLastTimeStamp);
+            FMP4_LOGD("MEDIA_FRAME_TYPE_VIDEO_I_FRAME %d,%d\r\n",m_tFileFrameInfo.dwTimeStamp,m_dwFileLastTimeStamp);
         }
         iContainerHeaderLen = 0;
-        if(0 != m_iEnhancedFlag)
-        {
-            iRet=m_pMediaHandle->FrameToContainer(&m_tFileFrameInfo,STREAM_TYPE_FMP4_STREAM,(unsigned char *)o_strRes,i_iResMaxLen,&iContainerHeaderLen);
-        }
-        else
-        {
-            iRet=m_pMediaHandle->FrameToContainer(&m_tFileFrameInfo,STREAM_TYPE_FMP4_STREAM,(unsigned char *)o_strRes,i_iResMaxLen,&iContainerHeaderLen);
-        }
+        iRet=m_pMediaHandle->FrameToContainer(&m_tFileFrameInfo,STREAM_TYPE_FMP4_STREAM,(unsigned char *)o_strRes,i_iResMaxLen,&iContainerHeaderLen);
         if(iRet<0 || i_iResMaxLen<iRet)
         {
-            FLV_LOGE("FrameToContainer err exit %d,%d[%s]\r\n",iRet,i_iResMaxLen,m_pPlaySrc->c_str());
+            FMP4_LOGE("FrameToContainer err exit %d,%d[%s]\r\n",iRet,i_iResMaxLen,m_pPlaySrc->c_str());
             iRet=-1;
             break;
         }
         if(0 == iRet)
         {
-            FLV_LOGW("FrameToContainer need more data %d,%d[%s]\r\n",iRet,i_iResMaxLen,m_pPlaySrc->c_str());
+            FMP4_LOGW("FrameToContainer need more data %d,%d[%s]\r\n",iRet,i_iResMaxLen,m_pPlaySrc->c_str());
             continue;
         }
         m_dwFileLastTimeStamp = m_tFileFrameInfo.dwTimeStamp;
@@ -154,7 +146,7 @@ int HttpFlvServerSession::GetFlv(char *o_strRes,int i_iResMaxLen)
 * -----------------------------------------------
 * 2023/09/21      V1.0.0         Yu Weifeng       Created
 ******************************************************************************/
-unsigned int HttpFlvServerSession::GetTickCount()	// milliseconds
+unsigned int HttpFMP4ServerSession::GetTickCount()	// milliseconds
 {
 #ifdef _WIN32
 	return ::GetTickCount64() & 0xFFFFFFFF;

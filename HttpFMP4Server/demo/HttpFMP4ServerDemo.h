@@ -1,7 +1,7 @@
 /*****************************************************************************
 * Copyright (C) 2020-2025 Hanson Yu  All rights reserved.
 ------------------------------------------------------------------------------
-* File Module           :       HttpFlvServerDemo.h
+* File Module           :       HttpFMP4ServerDemo.h
 * Description           : 	
 * Created               :       2020.01.13.
 * Author                :       Yu Weifeng
@@ -9,14 +9,14 @@
 * Last Modified         : 	
 * History               : 	
 ******************************************************************************/
-#ifndef HTTP_FLV_SERVER_DEMO_H
-#define HTTP_FLV_SERVER_DEMO_H
+#ifndef HTTP_FMP4_SERVER_DEMO_H
+#define HTTP_FMP4_SERVER_DEMO_H
 
 #include <mutex>
 #include <string>
 #include <list>
 #include <map>
-#include "HttpFlvServerIO.h"
+#include "HttpFMP4ServerIO.h"
 
 using std::map;
 using std::string;
@@ -24,24 +24,24 @@ using std::list;
 using std::mutex;
 
 /*****************************************************************************
--Class			: HttpFlvServerDemo
+-Class			: HttpFMP4ServerDemo
 -Description	: 
 * Modify Date	  Version		 Author 		  Modification
 * -----------------------------------------------
 * 2019/09/21	  V1.0.0		 Yu Weifeng 	  Created
 ******************************************************************************/
-class HttpFlvServerDemo : public TcpServer
+class HttpFMP4ServerDemo : public TcpServer
 {
 public:
-	HttpFlvServerDemo(int i_iServerPort);
-	virtual ~HttpFlvServerDemo();
+	HttpFMP4ServerDemo(int i_iServerPort);
+	virtual ~HttpFMP4ServerDemo();
     int Proc();
     
 private:
     int CheckMapServerIO();
-    int AddMapServerIO(HttpFlvServerIO * i_pHttpFlvServerIO,int i_iClientSocketFd);
+    int AddMapServerIO(HttpFMP4ServerIO * i_pHttpFMP4ServerIO,int i_iClientSocketFd);
     
-    map<int, HttpFlvServerIO *>  m_HttpFlvServerIOMap;
+    map<int, HttpFMP4ServerIO *>  m_HttpFMP4ServerIOMap;
     mutex m_MapMtx;
 };
 

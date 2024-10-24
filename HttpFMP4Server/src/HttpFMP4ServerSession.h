@@ -1,7 +1,7 @@
 /*****************************************************************************
 * Copyright (C) 2020-2025 Hanson Yu  All rights reserved.
 ------------------------------------------------------------------------------
-* File Module           :       HttpFlvServerSession.h
+* File Module           :       HttpFMP4ServerSession.h
 * Description           : 	
 * Created               :       2020.01.13.
 * Author                :       Yu Weifeng
@@ -9,8 +9,8 @@
 * Last Modified         : 	
 * History               : 	
 ******************************************************************************/
-#ifndef HTTP_FLV_SERVER_SESSION_H
-#define HTTP_FLV_SERVER_SESSION_H
+#ifndef HTTP_FMP4_SERVER_SESSION_H
+#define HTTP_FMP4_SERVER_SESSION_H
 
 #include "HttpServer.h"
 #include "MediaHandle.h"
@@ -29,22 +29,21 @@ using std::thread;
 
 
 /*****************************************************************************
--Class          : HttpFlvServerSession
--Description    : HttpFlvServerSession
+-Class          : HttpFMP4ServerSession
+-Description    : HttpFMP4ServerSession
 * Modify Date     Version             Author           Modification
 * -----------------------------------------------
 * 2022/01/11      V1.0.0              Yu Weifeng       Created
 ******************************************************************************/
-class HttpFlvServerSession
+class HttpFMP4ServerSession
 {
 public:
-	HttpFlvServerSession(char * i_strPlaySrc,int i_iEnhancedFlag=0);
-	virtual ~HttpFlvServerSession();
-    int GetFlv(char *o_strRes,int i_iResMaxLen);//return ResLen,<0 err
+	HttpFMP4ServerSession(char * i_strPlaySrc);
+	virtual ~HttpFMP4ServerSession();
+    int GetFMP4(char *o_strRes,int i_iResMaxLen);//return ResLen,<0 err
 private:
     unsigned int GetTickCount();
 
-    int m_iEnhancedFlag;
     string *m_pPlaySrc;
     MediaHandle *m_pMediaHandle;
     T_MediaFrameInfo m_tFileFrameInfo;

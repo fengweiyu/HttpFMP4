@@ -1,7 +1,7 @@
 /*****************************************************************************
 * Copyright (C) 2020-2025 Hanson Yu  All rights reserved.
 ------------------------------------------------------------------------------
-* File Module           :       HttpFlvServerInf.h
+* File Module           :       HttpFMP4ServerInf.h
 * Description           : 	
 * Created               :       2020.01.13.
 * Author                :       Yu Weifeng
@@ -9,26 +9,26 @@
 * Last Modified         : 	
 * History               : 	
 ******************************************************************************/
-#ifndef HTTP_FLV_SERVER_INF_H
-#define HTTP_FLV_SERVER_INF_H
+#ifndef HTTP_FMP4_SERVER_INF_H
+#define HTTP_FMP4_SERVER_INF_H
 
 
 
 
 /*****************************************************************************
--Class          : HttpFlvServerInf
--Description    : HttpFlvServerInf
+-Class          : HttpFMP4ServerInf
+-Description    : HttpFMP4ServerInf
 * Modify Date     Version             Author           Modification
 * -----------------------------------------------
 * 2020/01/11      V1.0.0              Yu Weifeng       Created
 ******************************************************************************/
-class HttpFlvServerInf
+class HttpFMP4ServerInf
 {
 public:
-	HttpFlvServerInf();
-	virtual ~HttpFlvServerInf();
+	HttpFMP4ServerInf();
+	virtual ~HttpFMP4ServerInf();
     int HandleHttpReq(const char * i_strReq,char *o_strRes,int i_iResMaxLen);//return ResLen,<0 err
-    int GetFLV(char *o_strRes,int i_iResMaxLen);
+    int GetFMP4(char *o_strRes,int i_iResMaxLen);
 private:
     void * m_pHandle;
 };

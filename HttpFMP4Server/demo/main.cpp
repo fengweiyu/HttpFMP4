@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "HttpFlvServerDemo.h"
+#include "HttpFMP4ServerDemo.h"
 
 static void PrintUsage(char *i_strProcName);
 
@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 {
     int iRet = -1;
     
-    int dwServerPort=9214;
+    int dwServerPort=9208;
     
     if(argc !=2)
     {
@@ -41,14 +41,14 @@ int main(int argc, char* argv[])
     {
         dwServerPort=atoi(argv[1]);
     }
-    HttpFlvServerDemo *pServerDemo = new HttpFlvServerDemo(dwServerPort);
+    HttpFMP4ServerDemo *pServerDemo = new HttpFMP4ServerDemo(dwServerPort);
     iRet=pServerDemo->Proc();//×èÈû
     
     return iRet;
 }
 /*****************************************************************************
 -Fuction        : PrintUsage
--Description    : http://localhost:9214/file/H264AAC.flv
+-Description    : http://localhost:9208/file/H264AAC.flv/test.mp4
 -Input          : 
 -Output         : 
 -Return         : 
@@ -59,8 +59,8 @@ int main(int argc, char* argv[])
 static void PrintUsage(char *i_strProcName)
 {
     printf("Usage: %s ServerPort \r\n",i_strProcName);
-    printf("run default args: %s 9214 \r\n",i_strProcName);
-    printf("client input url eg: http://localhost:9214/file/H264AAC.flv\r\n");
-    printf("client input url eg: http://localhost:9214/file_enhanced/H265AAC.flv\r\n");
+    printf("run default args: %s 9208 \r\n",i_strProcName);
+    printf("client input url eg: http://localhost:9208/file/H264AAC.flv/test.mp4\r\n");
+    printf("client input url eg: http://localhost:9208/file/H265AAC.flv/test.mp4\r\n");
 }
 
