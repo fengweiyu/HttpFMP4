@@ -1,0 +1,46 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/../build/linux/x86/HttpFlvServer",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}/../build/linux/x86/",//调试目录
+            "environment": [],
+            "justMyCode": false,
+            "purpose": ["debug-in-terminal"],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            //"miDebuggerPath": "/user/sbin/gdb", // 指定你的GDB路径
+            "symbolSearchPath": [
+                "/path/to/libmedia.a", // 指定第三方库文件路径
+                "${fileDirname}/../build/linux/x86/ThirdLib/media/lib" // 指定工作区路径
+            ],
+            "sourceFileMap": {
+                "/path/to/libHttpFlvServer.a": "${fileDirname}/../build/linux/x86/lib/libHttpFlvServer.a", // 映射.a库文件路径
+                "/path/to/libnet.a": "${fileDirname}/../build/linux/x86/net/libnet.a", // 映射.a库文件路径
+                "/path/to/libhttp.a": "${fileDirname}/../build/linux/x86/ThirdLib/http/libhttp.a", // 映射.a库文件路径
+                "/path/to/libmedia.a": "${fileDirname}/../build/linux/x86/ThirdLib/media/lib/libmedia.a" // 映射.a库文件路径
+            }
+        }
+
+    ]
+}
