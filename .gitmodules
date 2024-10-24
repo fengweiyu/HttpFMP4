@@ -1,0 +1,3 @@
+[submodule "HttpFMP4Server/src/ThirdSrc/media"]
+	path = HttpFMP4Server/src/ThirdSrc/media
+	url = https://github.com/fengweiyu/media.git
