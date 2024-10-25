@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="demo">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="demo\net">
+      <UniqueIdentifier>{c7758cbf-1887-47fe-ae4d-5458cb495cd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="demo\net\include">
+      <UniqueIdentifier>{999609c9-1e30-4427-84d1-3d478b06afd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\include">
+      <UniqueIdentifier>{f253436c-6de5-4c61-bfc7-39a99057dc29}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\demo\HttpFMP4ServerDemo.cpp">
+      <Filter>demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\demo\HttpFMP4ServerIO.cpp">
+      <Filter>demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\demo\main.cpp">
+      <Filter>demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\demo\net\TcpSocketWin.cpp">
+      <Filter>demo\net</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\demo\HttpFMP4ServerDemo.h">
+      <Filter>demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\demo\HttpFMP4ServerIO.h">
+      <Filter>demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\demo\net\include\NetAdapter.h">
+      <Filter>demo\net\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\demo\net\include\TcpSocket.h">
+      <Filter>demo\net\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\include\HttpFMP4ServerCom.h">
+      <Filter>src\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\include\HttpFMP4ServerInf.h">
+      <Filter>src\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
