@@ -37,7 +37,7 @@ HttpFMP4ServerSession::HttpFMP4ServerSession(char * i_strPlaySrc)
     m_pMediaHandle = new MediaHandle();
     m_dwFileLastTimeStamp = 0;
 
-    FMP4_LOGW("HttpFMP4ServerSession start%d, %s\r\n",m_iEnhancedFlag,m_pPlaySrc->c_str());
+    FMP4_LOGW("HttpFMP4ServerSession start, %s\r\n",m_pPlaySrc->c_str());
     memset(&m_tFileFrameInfo,0,sizeof(T_MediaFrameInfo));
     m_tFileFrameInfo.pbFrameBuf = new unsigned char [HTTP_FMP4_FRAME_BUF_MAX_LEN];
     m_tFileFrameInfo.iFrameBufMaxLen = HTTP_FMP4_FRAME_BUF_MAX_LEN;
