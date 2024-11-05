@@ -128,7 +128,7 @@ int HttpFMP4ServerSession::GetFMP4(char *o_strRes,int i_iResMaxLen)
         }
         if(0 == iRet)
         {
-            FMP4_LOGW("FrameToContainer need more data %d,%d[%s]\r\n",iRet,i_iResMaxLen,m_pPlaySrc->c_str());
+            //FMP4_LOGW("FrameToContainer need more data %d,%d[%s]\r\n",iRet,i_iResMaxLen,m_pPlaySrc->c_str());
             continue;
         }
         m_dwFileLastTimeStamp = m_tFileFrameInfo.dwTimeStamp;

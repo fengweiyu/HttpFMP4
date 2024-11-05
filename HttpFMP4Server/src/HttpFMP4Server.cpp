@@ -219,6 +219,7 @@ int HttpFMP4Server::HandleHttpReq(const char * i_strReq,char *o_strRes,int i_iRe
         return iRet;
     }
     memset(&tHttpReqPacket,0,sizeof(T_HttpReqPacket));
+    FMP4_LOGW("HandleHttpReq %s\r\n",i_strReq);
     iRet=HttpServer::ParseRequest((char *)i_strReq,strlen(i_strReq),&tHttpReqPacket);
     if(iRet < 0)
     {
@@ -280,7 +281,8 @@ int HttpFMP4Server::HandleReqGetFMP4(string *i_pPlaySrc,char *o_strRes,int i_iRe
     int iRet = -1;
     char *pcFMP4 = NULL;
     int iFMP4Len = -1;
-
+    char strRange[64];
+    
     if(NULL == i_pPlaySrc || NULL == o_strRes|| i_iResMaxLen <= 0)
     {
         FMP4_LOGE("HandleReqGetM3U8 NULL \r\n");
@@ -304,10 +306,13 @@ int HttpFMP4Server::HandleReqGetFMP4(string *i_pPlaySrc,char *o_strRes,int i_iRe
         delete pHttpServer;
         return iRet;
     }
-    HttpServer *pHttpServer=new HttpServer();
+    HttpServer *pHttpServer=new HttpServer(); 
     iRet=pHttpServer->CreateResponse();
+    //iRet=pHttpServer->CreateResponse(206,"Partial Content",HTTP_VERSION);
     iRet|=pHttpServer->SetResHeaderValue("Connection", "Keep-Alive");
     iRet|=pHttpServer->SetResHeaderValue("Content-Type", "video/mp4");//x-flv
+    snprintf(strRange,sizeof(strRange),"bytes 0-%d/%d",HTTP_FMP4_MAX_LEN*100-1,HTTP_FMP4_MAX_LEN*100);
+    //iRet|=pHttpServer->SetResHeaderValue("Content-Range", (const char *)strRange);
     iRet|=pHttpServer->SetResHeaderValue("Access-Control-Allow-Origin", "*");
     iRet=pHttpServer->FormatResToStream(pcFMP4,iFMP4Len,o_strRes,i_iResMaxLen);
     delete pHttpServer;
