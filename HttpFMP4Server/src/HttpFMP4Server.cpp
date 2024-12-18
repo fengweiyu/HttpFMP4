@@ -269,6 +269,10 @@ int HttpFMP4Server::HandleHttpReq(const char * i_strReq,char *o_strRes,int i_iRe
 /*****************************************************************************
 -Fuction        : HandleReqGetFMP4
 -Description    : //return ResLen,<0 err
+application/mp4 ，浏览器都当做文件下载(ios不会自动下载还是当播放然后不出图)
+video/mp4 ，Chrome可播放，ios(pc sarifa)无法播放(需要带range头并知道总长度)
+application/octet-stream ,和application/mp4差不多,chrome自动下载文件并自动命名.mp4，pc sarifa也是自动下载文件但是文件名不带.mp4后缀(-1 ...)
+video/quicktime ，chrome无法播放，ios(pc sarifa)可播放，但是需要修改支持mov(mov和mp4格式差不多，大概率也需要range头)
 -Input          : 
 -Output         : 
 -Return         : 
